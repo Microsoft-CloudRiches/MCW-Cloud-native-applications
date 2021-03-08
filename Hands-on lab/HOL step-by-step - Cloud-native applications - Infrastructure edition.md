@@ -680,6 +680,7 @@ In this task, you will push images to your ACR account, version images with tagg
     ```bash
     docker image tag [LOGINSERVER]/content-web:latest [LOGINSERVER]/content-web:v1
     docker image tag [LOGINSERVER]/content-api:latest [LOGINSERVER]/content-api:v1
+    docker image tag [LOGINSERVER]/content-init:latest [LOGINSERVER]/content-init:v1
     docker image ls
     ```
 
