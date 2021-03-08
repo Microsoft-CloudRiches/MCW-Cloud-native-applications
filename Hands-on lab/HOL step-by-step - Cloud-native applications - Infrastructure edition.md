@@ -562,34 +562,20 @@ In this task, you will configure the `web` container to communicate with the API
    docker image build -t content-web .
    ```
 
-9. Create and start the image passing the correct URI to the API container as an environment variable. This variable will address the API application using its container name over the Docker network you created. After running the container, check to see the container is running and note the dynamic port assignment for the next step.
+9. Create and start the image passing the correct URI to the API container as an environment variable. This variable will address the API application using its container name over the Docker network you created. After running the container, check to see the container is running and note the port 3000 assignment for the next step.
 
    ```bash
-   docker container run --name web --net fabmedical -P -d -e CONTENT_API_URL=http://api:3001 content-web
+   docker container run --name web --net fabmedical -p 3000:3000 -d -e CONTENT_API_URL=http://api:3001 content-web
    docker container ls
    ```
 
-10. Curl the speakers path again, using the port assigned to the web container. Again, you will see HTML returned, but because curl does not process javascript, you cannot determine if the web application is communicating with the api application. You must verify this connection in a browser.
-
-   ```bash
-   curl http://localhost:[PORT]/speakers.html
-   ```
-
-11. You will not be able to browse to the web application on the ephemeral port because the VM only exposes a limited port range. Now you will stop the web container and restart it using port 3000 to test in the browser. Type the following commands to stop the container, remove it, and run it again using explicit settings for the port.
-
-   ```bash
-    docker container stop web
-    docker container rm web
-    docker container run --name web --net fabmedical -p 3000:3000 -d -e CONTENT_API_URL=http://api:3001 content-web
-   ```
-
-12. Curl the speaker path again, using port `3000`. You will see the same HTML returned.
+10. Curl the speaker path again, using port `3000`. You will see the same HTML returned.
 
     ```bash
     curl http://localhost:3000/speakers.html
     ```
 
-13. You can now use a web browser to navigate to the website and successfully view the application at port `3000`. Replace `[BUILDAGENTIP]` with the IP address you used previously.
+11. You can now use a web browser to navigate to the website and successfully view the application at port `3000`. Replace `[BUILDAGENTIP]` with the IP address you used previously.
 
     ```bash
     http://[BUILDAGENTIP]:3000
