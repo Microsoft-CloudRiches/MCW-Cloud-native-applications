@@ -1123,7 +1123,7 @@ In this task, you will deploy the API application to the Azure Kubernetes Servic
 
 12. Return to the Kubernetes UI in your browser and select **+ Create**.
 
-13. In the **Create from input** tab, update the following YAML with the encoded connection string from your clipboard, paste the YAML data into the create dialog, and choose **Upload**.
+13. In the **Configuration -> Secrets -> Add** tab, update the following YAML with the encoded connection string from your clipboard, paste the YAML data into the create dialog, and choose **Add**.
 
     ```yaml
     apiVersion: v1
@@ -1135,15 +1135,15 @@ In this task, you will deploy the API application to the Azure Kubernetes Servic
       db: <base64 encoded value>
     ```
 
-    ![This is a screenshot of the Kubernetes management dashboard showing the YAML file for creating a deployment.](media/Ex2-Task1.13.png "Upload YAML data")
+    ![This is a screenshot of the Azure Portal Kubernetes management showing the YAML file for creating a deployment.](media/Ex2-Task1.13.png "Upload YAML data")
 
-14. Scroll down in the Kubernetes dashboard until you can see **Secrets** in the left-hand menu. Select it.
+14. Choose Filter by namespace **Default**.
 
-    ![This is a  screenshot of the Kubernetes management dashboard showing secrets.](media/Ex2-Task1.14.png "Manage Kubernetes secrets")
+    ![This is a screenshot of the Azure Portal Kubernetes management showing secrets.](media/Ex2-Task1.14.png "Manage Kubernetes secrets")
 
 15. View the details for the **cosmosdb** secret. Select the eyeball icon to show the secret.
 
-    ![This is a screenshot of the Kubernetes management dashboard showing the value of a secret.](media/Ex2-Task1.15.png "View CosmosDB secret")
+    ![This is a screenshot of the Azure Portal Kubernetes management showing the value of a secret.](media/Ex2-Task1.15.png "View CosmosDB secret")
 
 16. Next, download the api deployment configuration using the following command in your Azure Cloud Shell window:
 
