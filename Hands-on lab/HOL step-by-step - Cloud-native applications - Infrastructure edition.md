@@ -970,114 +970,71 @@ In this exercise, you will connect to the Azure Kubernetes Service cluster you c
 
 ### Task 1: Tunnel into the Azure Kubernetes Service cluster
 
-In this task, you will gather the information you need about your Azure Kubernetes Service cluster to connect to the cluster and execute commands to connect to the Kubernetes management dashboard from cloud shell.
+In this task, you will gather the information you need about your Azure Kubernetes Service cluster to connect to the cluster and execute commands to connect to the Kubernetes Service management from Azure Portal.
 
-> **Note**: The following tasks should be executed in cloud shell and not the build machine, so disconnect from build machine if still connected.
+1. Select **Kubernetes services** -> fabmedical-[SUFFIX] from Azure Protal, then check **Overview** for the information.
 
-1. Verify that you are connected to the correct subscription with the following command to show your default subscription:
+   ![In this screenshot of the Azure Portal, check Kubernetes services, which produces a list of resources.](media/image75.png "Kubernetes Service in Azure Portal")
 
-   ```bash
-   az account show
-   ```
+### Task 2: Deploy a service using the Kubernetes management in Azure Portal
 
-   - If you are not connected to the correct subscription, list your subscriptions and then set the subscription by its id with the following commands (similar to what you did in cloud shell before the lab):
+In this task, you will deploy the API application to the Azure Kubernetes Service cluster using the Azure Portal.
 
-   ```bash
-   az account list
-   az account set --subscription {id}
-   ```
+1. From the Azure Portal, select **Workloads** in the left side. Then select **Add**.
 
-2. Configure kubectl to connect to the Kubernetes cluster:
+   ![This is a screenshot of the Deploy a Containerized App Add button.](media/image78.png "Add for deploy resources")
 
-   ```bash
-   az aks get-credentials -a --name fabmedical-SUFFIX --resource-group fabmedical-SUFFIX
-   ```
+2. Select **YAML** format.
 
-3. Test that the configuration is correct by running a simple kubectl command to produce a list of nodes:
+   Add the following configuration to the below property:
 
-   ```bash
-   kubectl get nodes
-   ```
-
-   ![In this screenshot of the console, kubectl get nodes has been typed and run at the command prompt, which produces a list of nodes.](media/image75.png "kubectl get nodes")
-
-4. Since the AKS cluster uses RBAC, a `ClusterRoleBinding` must be created before you can correctly access the dashboard. To create the required binding, execute the command below:
-
-   ```bash
-   kubectl create clusterrolebinding kubernetes-dashboard --clusterrole=cluster-admin --serviceaccount=kube-system:kubernetes-dashboard
-   ```
-
-   > **Note**: If you get an error saying `error: failed to create clusterrolebinding: clusterrolebindings.rbac.authorization.k8s.io "kubernetes-dashboard" already exists` just ignore it and move on to the next step.
-
-5. Before you can create an SSH tunnel and connect to the Kubernetes Dashboard, you will need to download the **Kubeconfig** file within Azure Cloud Shell that contains the credentials you will need to authenticate to the Kubernetes Dashboard.
-
-    Within the Azure Cloud Shell, use the following command to download the Kubeconfig file:
-
-    ```bash
-    download /home/<username>/.kube/config
+    ```yaml
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: api
+      labels:
+        app: api
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          app: api
+      strategy:
+        type: RollingUpdate
+        rollingUpdate:
+          maxUnavailable: 25%
+          maxSurge: 25%
+      template:
+        metadata:
+          name: api
+          labels:
+            app: api
+        spec:
+          containers:
+            - name: api
+              image: fabmedical[SUFFIX].azurecr.io/content-api
+              resources:
+                requests:
+                  cpu: '1'
+                  memory: 128Mi
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+              imagePullPolicy: Always
+              securityContext:
+                privileged: false
+          restartPolicy: Always
+          terminationGracePeriodSeconds: 30
+          dnsPolicy: ClusterFirst
+          securityContext: {}
+          schedulerName: default-scheduler
+      revisionHistoryLimit: 10
+      progressDeadlineSeconds: 600
     ```
 
-    Make sure to replace the `<username>` placeholder with your name from the command-line in the Azure Cloud Shell.
-
-    >**Note**: You can find the `<username>` from the first part of the Azure Cloud Shell command-line prompt; such as `<username>@Azure:~$`.
-    >
-    > You can also look in the `/home` directory and so see the directory name that exists within it to find the correct username directory where the Kubeconfig file resides:
-    >
-    > ```bash
-    > ls /home
-    > ```
-
-6. Create an SSH tunnel linking a local port (`8001`) on your cloud shell host to port 443 on the management node of the cluster. Cloud shell will then use the web preview feature to give you remote access to the Kubernetes dashboard. Execute the command below replacing the values as follows:
-
-   > **Note**: After you run this command, it may work at first and later lose its connection, so you may have to run this again to reestablish the connection. If the Kubernetes dashboard becomes unresponsive in the browser this is an indication to return here and check your tunnel or rerun the command.
-
-   ```bash
-   az aks browse --name fabmedical-SUFFIX --resource-group fabmedical-SUFFIX
-   ```
-
-   ![In this screenshot of the console, the output of the az aks browse command.](media/image76.png "az aks browse command output")
-
-7. If the tunnel is successful, you will see the Kubernetes Dashboard authentication screen. Select the **Kubeconfig** option, select the ellipsis (`...`) button, select the **Kubeconfig** file that was previously downloaded, then select **Sign in**.
-
-   ![The screenshot shows the Kubernetes Dashboard authentication prompt.](media/kubernetes-dashboard-kubeconfig-prompt.png "Kubernetes Dashboard authentication prompt")
-
-8. Once authenticated, you will see the Kubernetes management dashboard.
-
-    ![This is a screenshot of the Kubernetes management dashboard. Overview is highlighted on the left, and at right, kubernetes has a green check mark next to it. Below that, default-token-s6kmc is listed under Secrets.](media/image77.png "Show services and secrets")
-
-   > **Note**: If the tunnel is not successful (if a JSON output is displayed), execute the command below and then return to task 5 above:
-   >
-   > ```bash
-   > az extension add --name aks-preview
-   > ```
-
-### Task 2: Deploy a service using the Kubernetes management dashboard
-
-In this task, you will deploy the API application to the Azure Kubernetes Service cluster using the Kubernetes dashboard.
-
-1. From the Kubernetes dashboard, select **Create** in the top right corner.
-
-2. From the Resource creation view, select **Create from form**.
-
-   ![This is a screenshot of the Deploy a Containerized App dialog box. Specify app details below is selected, and the fields have been filled in with the information that follows. At the bottom of the dialog box is a SHOW ADVANCED OPTIONS link.](media/image78.png "Display Create from form")
-
-   - Enter `api` for the App name.
-
-   - Enter `[LOGINSERVER]/content-api` for the Container Image, replacing `[LOGINSERVER]` with your ACR login server, such as `fabmedicalsol.azurecr.io`.
-
-   - Set Number of pods to `1`.
-
-   - Set Service to `Internal`.
-
-   - Use `3001` for Port and `3001` for Target port.
-
-3. Select **SHOW ADVANCED OPTIONS**
-
-   - Enter `1` for the CPU requirement (cores).
-
-   - Enter `128` for the Memory requirement (MiB).
-
    ![In the Advanced options dialog box, the above information has been entered. At the bottom of the dialog box is a Deploy button.](media/image79.png "Show Advanced Options")
+
+3. After deploy the API application, create a service for internal Port 3001 and Target Port for 3001.
 
 4. Select **Deploy** to initiate the service deployment based on the image. This can take a few minutes. In the meantime, you will be redirected to the Overview dashboard. Select the **API** deployment from the **Overview** dashboard to see the deployment in progress.
 
