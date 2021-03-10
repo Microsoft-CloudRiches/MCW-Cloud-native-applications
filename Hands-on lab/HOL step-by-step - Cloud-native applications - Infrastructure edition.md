@@ -1133,12 +1133,12 @@ In this task, you will deploy the API application to the Azure Kubernetes Servic
 17. Add the following environment configuration to the container spec, below the `image` property:
 
     ```yaml
-        env:
-        - name: MONGODB_CONNECTION
-          valueFrom:
-            secretKeyRef:
-              name: cosmosdb
-              key: db
+              env:
+              - name: MONGODB_CONNECTION
+                valueFrom:
+                  secretKeyRef:
+                    name: cosmosdb
+                    key: db
     ```
 
     ![This is a screenshot of the Kubernetes management showing part of the deployment file.](media/AzurePortal010.png "Edit the api.deployment.yml file")
