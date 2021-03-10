@@ -972,9 +972,13 @@ In this exercise, you will connect to the Azure Kubernetes Service cluster you c
 
 In this task, you will gather the information you need about your Azure Kubernetes Service cluster to connect to the cluster and execute commands to connect to the Kubernetes Service management from Azure Portal.
 
-1. Select **Kubernetes services** -> fabmedical-[SUFFIX] from Azure Protal, then check **Overview** for the information.
+1. Open the Azure portal in your browser.
 
-   ![In this screenshot of the Azure Portal, check Kubernetes services, which produces a list of resources.](media/image75.png "Kubernetes Service in Azure Portal")
+2. Navigate to your resource group and find your **Kubernetes services** resource.
+
+3. Select `fabmedical-[SUFFIX]`, then check **Overview** for the information.
+
+   ![In this screenshot of the Azure Portal, check Kubernetes services, which produces a list of resources.](media/AzurePortal001.png "Kubernetes Service in Azure Portal")
 
 ### Task 2: Deploy a service using the Kubernetes management in Azure Portal
 
@@ -982,7 +986,7 @@ In this task, you will deploy the API application to the Azure Kubernetes Servic
 
 1. From the Azure Portal, select **Workloads** in the left side. Then select **Add**.
 
-   ![This is a screenshot of the Deploy a Containerized App Add button.](media/image78.png "Add for deploy resources")
+   ![This is a screenshot of the Deploy a Containerized App Add button.](media/AzurePortal002.png "Add for deploy resources")
 
 2. Select **YAML** format.
 
@@ -1013,7 +1017,7 @@ In this task, you will deploy the API application to the Azure Kubernetes Servic
         spec:
           containers:
             - name: api
-              image: fabmedical[SUFFIX].azurecr.io/content-api
+              image: [LOGINSERVER].azurecr.io/content-api
               resources:
                 requests:
                   cpu: '1'
@@ -1032,31 +1036,59 @@ In this task, you will deploy the API application to the Azure Kubernetes Servic
       progressDeadlineSeconds: 600
     ```
 
-   ![In the Advanced options dialog box, the above information has been entered. At the bottom of the dialog box is a Deploy button.](media/image79.png "Show Advanced Options")
+3. Update the `[LOGINSERVER]` entry to match the name of your ACR Login Server.
 
-3. After deploy the API application, create a service for internal Port 3001 and Target Port for 3001.
+   ![In the dialog box, deploy app from yaml format.](media/AzurePortal003.png "Add Deployment from yaml")
 
-4. Select **Deploy** to initiate the service deployment based on the image. This can take a few minutes. In the meantime, you will be redirected to the Overview dashboard. Select the **API** deployment from the **Overview** dashboard to see the deployment in progress.
+4. After deploy the API application, create a service for internal Port 3001 and Target Port for 3001 with the same method.
 
-    ![This is a screenshot of the Kubernetes management dashboard. Overview is highlighted on the left, and at right, a red arrow points to the api deployment.](media/image80.png "See the deployment in progress")
+   Select **Services and ingresses** then press **Add**.
 
-5. Kubernetes indicates a problem with the `api` **Replica Set** after some seconds. Select the ellipsis icon, then select **Logs** to investigate.
+   ![This is a screenshot of the Deploy a Service Add button.](media/AzurePortal004.png "Add Service")
+   
+5. Select **YAML** format.
 
-    ![This is a screenshot of the Kubernetes management dashboard that shows an error with the replica set, and ellipse menu with Logs option highlighted.](media/Ex2-Task1.5.png "Investigate logs")
+   Add the following configuration to the below property:
 
-6. The log indicates that the content-api application is once again failing because it cannot find a mongodb api to communicate with. You will resolve this issue by connecting to Cosmos DB.
+    ```yaml
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: api
+      namespace: default
+      labels:
+        app: api
+    spec:
+      ports:
+        - name: tcp-3001
+          protocol: TCP
+          port: 3001
+          targetPort: 3001
+      selector:
+        app: api
+    ```
+    
+    ![In the dialog box, deploy a Service from yaml format.](media/AzurePortal004.png "Add Service from yaml")
 
-   ![This screenshot of the Kubernetes management dashboard shows logs output for the api container.](media/Ex2-Task1.6.png "MongoDB communication error")
+6. Select **Add** to initiate the service deployment based on the image. This can take a few minutes. In the meantime, you will be redirected to the Overview dashboard. Select the **API** deployment from the **Workloads** to see the deployment in progress.
 
-7. Open the Azure portal in your browser and navigate to your resource group and find your Cosmos DB resource. Select the Cosmos DB resource to view details.
+    ![This is a screenshot of api deployment.](media/AzurePortal005.png "Select api in Deployments")
+
+7. Select the **Live logs**, then **Select a Pod** to investigate.
+
+    ![This is a screenshot of that shows an error with a Pod.](media/AzurePortal006.png "Streaming logs")
+
+8. The log indicates that the content-api application is once again failing because it cannot find a mongodb api to communicate with. You will resolve this issue by connecting to Cosmos DB.
+
+9. Navigate to your resource group and find your Cosmos DB resource. Select the Cosmos DB resource to view details.
 
    ![This is a screenshot of the Azure Portal showing the Cosmos DB among existing resources.](media/Ex2-Task1.9.png "Select CosmosDB resource from list")
 
-8. Under **Quick Start** select the **Node.js** tab and copy the **Node.js 3.0 connection string**.
+10. Under **Quick Start** select the **Node.js** tab and copy the **Node.js 3.0 connection string**.
 
     ![This is a screenshot of the Azure Portal showing the quick start for setting up Cosmos DB with MongoDB API. The copy button is highlighted.](media/Ex2-Task1.10.png "Capture CosmosDB connection string")
 
-9. Update the provided connection string with a database `contentdb` and a replica set `globaldb`.
+11. Update the provided connection string with a database `contentdb` and a replica set `globaldb`.
 
    > **Note**: Username and password redacted for brevity.
 
@@ -1064,11 +1096,7 @@ In this task, you will deploy the API application to the Azure Kubernetes Servic
    mongodb://<USERNAME>:<PASSWORD>@fabmedical-<SUFFIX>.documents.azure.com:10255/contentdb?ssl=true&replicaSet=globaldb
    ```
 
-10. To avoid disconnecting from the Kubernetes dashboard, open a **new** Azure Cloud Shell console.
-
-     ![This is a screenshot of the cloud shell window with a red arrow pointing at the "Open new session" button on the toolbar.](media/hol-2019-10-19_06-13-34.png "Open new Azure Cloud Shell console")
-
-11. You will setup a Kubernetes secret to store the connection string and configure the `content-api` application to access the secret. First, you must base64 encode the secret value. Open your Azure Cloud Shell window and use the following command to encode the connection string and then, copy the output.
+12. Open Azure Cloud Shell console. You will setup a Kubernetes secret to store the connection string and configure the `content-api` application to access the secret. First, you must base64 encode the secret value. Open your Azure Cloud Shell window and use the following command to encode the connection string and then, copy the output.
 
     > **Note**: Double quote marks surrounding the connection string are required to successfully produce the required output.
 
@@ -1078,9 +1106,7 @@ In this task, you will deploy the API application to the Azure Kubernetes Servic
 
     ![This is a screenshot of the Azure cloud shell window showing the command to create the base64 encoded secret.  The output to copy is highlighted.](media/hol-2019-10-18_07-12-13.png "Show encoded secret")
 
-12. Return to the Kubernetes UI in your browser and select **+ Create**.
-
-13. In the **Configuration -> Secrets -> Add** tab, update the following YAML with the encoded connection string from your clipboard, paste the YAML data into the create dialog, and choose **Add**.
+13. Return to the Kubernetes Service in Azure Portal. In the **Configuration -> Secrets -> Add** tab, update the following YAML with the encoded connection string from your clipboard, paste the YAML data into the create dialog, and choose **Add**.
 
     ```yaml
     apiVersion: v1
@@ -1092,67 +1118,56 @@ In this task, you will deploy the API application to the Azure Kubernetes Servic
       db: <base64 encoded value>
     ```
 
-    ![This is a screenshot of the Azure Portal Kubernetes management showing the YAML file for creating a deployment.](media/Ex2-Task1.13.png "Upload YAML data")
+    ![This is a screenshot of the Azure Portal Kubernetes management showing the YAML file for creating a deployment.](media/AzurePortal007.png "Upload YAML data")
 
 14. Choose Filter by namespace **Default**.
 
-    ![This is a screenshot of the Azure Portal Kubernetes management showing secrets.](media/Ex2-Task1.14.png "Manage Kubernetes secrets")
+    ![This is a screenshot of the Azure Portal Kubernetes management showing secrets.](media/AzurePortal008.png "Manage Kubernetes secrets")
 
 15. View the details for the **cosmosdb** secret. Select the eyeball icon to show the secret.
 
-    ![This is a screenshot of the Azure Portal Kubernetes management showing the value of a secret.](media/Ex2-Task1.15.png "View CosmosDB secret")
+    ![This is a screenshot of the Azure Portal Kubernetes management showing the value of a secret.](media/AzurePortal009.png "View CosmosDB secret")
 
-16. Next, download the api deployment configuration using the following command in your Azure Cloud Shell window:
+16. Next, go back to **Workloads -> Deployments -> api**. Choose YAML tab.
 
-    ```bash
-    kubectl get -o=yaml deployment api > api.deployment.yml
-    ```
-
-17. Edit the downloaded file using cloud shell code editor:
-
-    ```bash
-    code api.deployment.yml
-    ```
-
-    Add the following environment configuration to the container spec, below the `image` property:
+17. Add the following environment configuration to the container spec, below the `image` property:
 
     ```yaml
-      env:
-      - name: MONGODB_CONNECTION
-        valueFrom:
-          secretKeyRef:
-            name: cosmosdb
-            key: db
+        env:
+        - name: MONGODB_CONNECTION
+          valueFrom:
+            secretKeyRef:
+              name: cosmosdb
+              key: db
     ```
 
-    ![This is a screenshot of the Kubernetes management dashboard showing part of the deployment file.](media/Ex2-Task1.17.png "Edit the api.deployment.yml file")
+    ![This is a screenshot of the Kubernetes management showing part of the deployment file.](media/AzurePortal010.png "Edit the api.deployment.yml file")
 
-18. Save your changes and close the editor.
+18. Press **Review + Save**.
 
-    ![This is a screenshot of the code editor save and close actions.](media/Ex2-Task1.17.1.png "Code editor configuration update")
-
-19. Update the api deployment by using `kubectl` to apply the new configuration.
-
-    ```bash
-    kubectl apply -f api.deployment.yml
-    ```
-
-    >**Note**: If you receive an error like `Operation cannot be fulfilled on deployment.apps "api"` then delete the deployment and recreate it using the modified `api.deployment.yml` file.
-
-      ```bash
-      kubectl delete deployment api
-      kubectl create -f api.deployment.yml
-      ```
+19. Click **Confirm manifest changes** then press **Save**.
 
 20. Select **Deployments** then **api** to view the api deployment. It now has a healthy instance and the logs indicate it has connected to mongodb.
-
-    ![This is a screenshot of the Kubernetes management dashboard showing logs output.](media/Ex2-Task1.19.png "API Logs")
 
 ### Task 3: Deploy a service using kubectl
 
 In this task, deploy the web service using `kubectl`.
 
 1. Open a **new** Azure Cloud Shell console.
+
+2. Configure kubectl to connect to the Kubernetes cluster:
+
+   ```bash
+   az aks get-credentials -a --name fabmedical-SUFFIX --resource-group fabmedical-SUFFIX
+   ```
+
+3. Test that the configuration is correct by running a simple kubectl command to produce a list of nodes:
+
+   ```bash
+   kubectl get nodes
+   ```
+   
+   ![In this screenshot of the console, kubectl get nodes has been typed and run at the command prompt, which produces a list of nodes.](media/image75.png "kubectl get nodes")
 
 2. Create a text file called `web.deployment.yml` using the Azure Cloud Shell
    Editor.
