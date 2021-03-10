@@ -1149,6 +1149,10 @@ In this task, you will deploy the API application to the Azure Kubernetes Servic
 
 20. Select **Deployments** then **api** to view the api deployment. It now has a healthy instance and the logs indicate it has connected to mongodb.
 
+![This is a screenshot of the api Live logs.](media/AzurePortal011.png "Live logs")
+
+![This is a screenshot of the api historical logs that Connected to mongodb.](media/AzurePortal012.png "Historical logs that Connected to mongodb")
+
 ### Task 3: Deploy a service using kubectl
 
 In this task, deploy the web service using `kubectl`.
@@ -1169,14 +1173,14 @@ In this task, deploy the web service using `kubectl`.
    
    ![In this screenshot of the console, kubectl get nodes has been typed and run at the command prompt, which produces a list of nodes.](media/image75.png "kubectl get nodes")
 
-2. Create a text file called `web.deployment.yml` using the Azure Cloud Shell
+4. Create a text file called `web.deployment.yml` using the Azure Cloud Shell
    Editor.
 
    ```bash
    code web.deployment.yml
    ```
 
-3. Copy and paste the following text into the editor:
+5. Copy and paste the following text into the editor:
 
    > **Note**: Be sure to copy and paste only the contents of the code block carefully to avoid introducing any special characters.
 
@@ -1237,13 +1241,13 @@ In this task, deploy the web service using `kubectl`.
            terminationGracePeriodSeconds: 30
    ```
 
-4. Update the `[LOGINSERVER]` entry to match the name of your ACR Login Server.
+6. Update the `[LOGINSERVER]` entry to match the name of your ACR Login Server.
 
-5. Select the **...** button and choose **Save**.
+7. Select the **...** button and choose **Save**.
 
    ![In this screenshot of an Azure Cloud Shell editor window, the ... button has been selected and the Save option is highlighted.](media/b4-image62.png "Save Azure Cloud Shell changes")
 
-6. Select the **...** button again and choose **Close Editor**.
+8. Select the **...** button again and choose **Close Editor**.
 
    ![In this screenshot of the Azure Cloud Shell editor window, the ... button has been selected and the Close Editor option is highlighted.](media/b4-image63.png "Close Azure Cloud Editor")
 
@@ -1287,13 +1291,13 @@ In this task, deploy the web service using `kubectl`.
 
     ![In this screenshot of the console, kubectl apply -f kubernetes-web.yaml has been typed and run at the command prompt. Messages about web deployment and web service creation appear below.](media/image93.png "kubectl create application")
 
-11. Return to the browser where you have the Kubernetes management dashboard open. From the navigation menu, under **Discovery and Load Balancing**, select the **Services** view.
+11. Return to the browser where you have the Azure Portal. From Kubernetes Service management, under **Services and ingresses**, select the **Services** view.
 
 12. From the Services view, select the `web` service, and from this view, you will see the web service deploying. This deployment can take a few minutes.
 
 13. When it completes, navigate to the main services link, you should be able to access the website via an external endpoint.
 
-    ![In the Kubernetes management dashboard, Services is selected below Discovery and Load Balancing in the navigation menu. At right are three boxes that display various information about the web service deployment: Details, Pods, and Events.](media/image94.png "Display External Endpoint")
+    ![In the Kubernetes Services management, Services is selected below Discovery and Load Balancing in the navigation menu.](media/AzurePortal013.png "Display External Endpoint")
 
 14. In the top navigation, select the `speakers` and `sessions` links.
 
