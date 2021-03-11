@@ -44,7 +44,7 @@ Microsoft and the trademarks listed at https://www.microsoft.com/en-us/legal/int
     - [Task 3: Migrate data to Azure Cosmos DB](#task-3-migrate-data-to-azure-cosmos-db)
   - [Exercise 3: Deploy the solution to Azure Kubernetes Service](#exercise-3-deploy-the-solution-to-azure-kubernetes-service)
     - [Task 1: Tunnel into the Azure Kubernetes Service cluster](#task-1-tunnel-into-the-azure-kubernetes-service-cluster)
-    - [Task 2: Deploy a service using the Kubernetes management dashboard](#task-2-deploy-a-service-using-the-kubernetes-management-dashboard)
+    - [Task 2: Deploy a service using the Kubernetes management in Azure Portal](#task-2-deploy-a-service-using-the-kubernetes-management-in-Azure-Portal)
     - [Task 3: Deploy a service using kubectl](#task-3-deploy-a-service-using-kubectl)
     - [Task 4: Deploy a service using a Helm chart](#task-4-deploy-a-service-using-a-helm-chart)
     - [Task 5: Test the application in a browser](#task-5-test-the-application-in-a-browser)
@@ -1309,17 +1309,17 @@ In this task, you will deploy the web service using a [Helm](https://helm.sh/) c
 
 You will configure a Helm Chart that will be used to deploy and configure the **content-web** container image to Kubernetes. This is a technique that can be used to more easily deploy and manage the application on the Azure Kubernetes Cluster.
 
-1. From the Kubernetes dashboard, under **Workloads**, select **Deployments**.
+1. From the Kubernetes Service, under **Workloads**, select **Deployments**.
 
-2. Select the triple vertical dots on the right of the `web` deployment and then choose **Delete**. When prompted, select **Delete** again.
+2. Select the `web` deployment and then choose **Delete**. When prompted **Confirm delete**, select **Delete** again.
 
-   ![A screenshot of the Kubernetes management dashboard showing how to delete a deployment.](media/Ex2-Task4.2.png "Kubernetes dashboard web deployments")
+   ![A screenshot of the Kubernetes management dashboard showing how to delete a deployment.](media/AzurePortal014.png "Delete web deployments")
 
-3. From the Kubernetes dashboard, under **Discovery and Load Balancing**, select **Services**.
+3. From the Kubernetes Service, under **Services and ingresses**, select **Services**.
 
-4. Select the triple vertical dots on the right of the **web** service and then choose **Delete**. When prompted, select **Delete** again.
+4. Select the **web** service and then choose **Delete**. When prompted **Confirm delete**, select **Delete** again.
 
-   ![A screenshot of the Kubernetes management dashboard showing how to delete a deployment.](media/Ex2-Task4.4.png "Kubernetes delete deployment")
+   ![A screenshot of the Kubernetes Service showing how to delete a deployment.](media/AzurePortal015.png "Kubernetes delete service deployment")
 
 5. Open a **new** Azure Cloud Shell console.
 
@@ -1470,9 +1470,9 @@ You will configure a Helm Chart that will be used to deploy and configure the **
 
     ![In this screenshot of the console, helm install web ./web has been typed and run at the command prompt. Messages about web deployment and web service creation appear below.](media/Ex2-Task4.24.png "Helm web deployment messages")
 
-24. Return to the browser where you have the Kubernetes management dashboard open. From the navigation menu, select **Services** view under **Discovery and Load Balancing**. From the Services view, select the **web** service, and from this view, you will see the web service deploying. This deployment can take a few minutes. When it completes, you should be able to access the website via an external endpoint.
+24. Return to the browser where you have the Azure Portal open. From the navigation menu, select **Services and ingresses**. From the Services view, select the **web** service, and from this view, you will see the web service deploying. This deployment can take a few minutes. When it completes, you should be able to access the website via an external endpoint.
 
-    ![In the Kubernetes management dashboard, Services is selected below Discovery and Load Balancing in the navigation menu. At right are three boxes that display various information about the web service deployment: Details, Pods, and Events. "External endpoints" is highlighted to show that an external endpoint has been created.](media/image94.png "Web service endpoint")
+    ![Services is selected below Discovery and Load Balancing in the navigation menu. "External endpoints" is highlighted to show that an external endpoint has been created.](media/AzurePortal013.png "Web service endpoint")
 
 25. Select the speakers and sessions links.
 
