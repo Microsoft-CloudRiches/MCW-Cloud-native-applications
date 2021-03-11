@@ -1698,21 +1698,17 @@ In this task, you will increase the number of instances for the API deployment i
 
    ![Pods status: 1 pending, 1 running is highlighted.](media/AzurePortal017.png "View pods details")
 
-6. From the navigation menu, select **Deployments** from the list. Note that the api service has a pending status indicated by the grey timer icon, and it shows a pod count 1 of 2 instances (shown as `1/2`).
-
-   ![In the Deployments box, the api service is highlighted with a grey timer icon at left and a pod count of 1/2 listed at right.](media/image118.png "View api active pods")
-
-    > **Note**: If you receive an error about insufficient CPU, that is expected.
-
-7. From the Navigation menu, select **Workloads**. From this view, note that the health overview in the right panel of this view. You will see the following:
+6. From the Navigation menu, select **Workloads**. **Filter by namespace** choose **default**. From this view, note that the health overview in the right panel of this view. You will see the following:
 
    - One deployment and one replica set are each healthy for the api service.
 
    - One replica set is healthy for the web service.
 
    - Three pods are healthy.
+   
+   ![View active pods.](media/AzurePortal017.png "View active pods")
 
-8. Navigate to the web application from the browser again. The application should still work without errors as you navigate to Speakers and Sessions pages.
+7. Navigate to the web application from the browser again. The application should still work without errors as you navigate to Speakers and Sessions pages.
 
    - Navigate to the `/stats` page. You will see information about the environment including:
 
