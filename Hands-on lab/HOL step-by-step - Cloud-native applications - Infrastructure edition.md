@@ -1754,7 +1754,7 @@ In this task, you will try to increase the number of instances for the API servi
 
    - Your container spec should now look like this:
 
-   ![Screenshot of the deployment JSON code, with the $.spec.template.spec.containers[0] section highlighted, showing the updated values for containerPort and hostPort, both set to port 3001.](media/image85.png "View container ports")
+   ![Screenshot of the deployment yaml code, with the $.spec.template.spec.containers[0] section highlighted, showing the updated values for containerPort and hostPort, both set to port 3001.](media/image85.png "View container ports")
 
 7. Copy the updated document from notepad into the clipboard. Return to the Kubernetes dashboard, which should still be viewing the **api** deployment.
 
@@ -1762,7 +1762,7 @@ In this task, you will try to increase the number of instances for the API servi
 
    - Select Update.
 
-   ![UPDATE is highlighted in the Edit a Deployment dialog box.](media/image88.png "Update API YAML")
+   ![UPDATE is highlighted in the Edit a Deployment dialog box.](media/AzurePortal019.png "Update API YAML")
 
 8. From the API deployment view, select **Scale**.
 
