@@ -1732,28 +1732,24 @@ In this task, you will increase the number of instances for the API deployment i
 
 In this task, you will try to increase the number of instances for the API service container beyond available resources in the cluster. You will observe how Kubernetes handles this condition and correct the problem.
 
-1. From the navigation menu, select **Deployments**. From this view, select the **api** deployment.
+1. From the navigation menu, select **Workloads** -> **Deployments**. From this view, select the **api** deployment.
 
-2. Configure the deployment to use a fixed host port for initial testing. Select the vertical ellipses and then select **Edit**.
+2. Configure the deployment by **yaml** to use a fixed host port for initial testing.
 
-3. In the Edit a resource dialog, select the YAML tab. You will see a list of settings shown in YAML format. Use the copy button to copy the text to your clipboard.
+3. In the Edit a resource dialog, You will see a list of settings shown in YAML format. Use the copy button to copy the text to your clipboard.
 
-   ![Screenshot of the Edit a resource dialog box that displays JSON data.](media/api-deployment-edit.PNG "Edit a resource YAML config")
+   ![Screenshot of the Edit a resource dialog box that displays yaml data.](media/AzurePortal018.PNG "Edit a resource YAML config")
 
 4. Paste the contents into the text editor of your choice (such as Notepad on Windows, macOS users can use TextEdit).
 
-5. Scroll down about halfway to find the node `$.spec.template.spec.containers[0]`, as shown in the screenshot below.
-
-    ![Screenshot of the deployment code, with the $.spec.template.spec.containers[0] section highlighted.](media/image84.png "Container deployment configuration")
-
-6. The containers spec has a single entry for the API container at the moment. You will see that the name of the container is `api` - this is how you know you are looking at the correct container spec.
+5. The containers spec has a single entry for the API container at the moment. You will see that the name of the container is `api` - this is how you know you are looking at the correct container spec.
 
    - Add the following snippet below the `name` property in the container spec:
 
    ```text
-     ports:
-	    - containerPort: 3001
-	      hostPort: 3001
+             ports:
+	            - containerPort: 3001
+	              hostPort: 3001
    ```
 
    - Your container spec should now look like this:
