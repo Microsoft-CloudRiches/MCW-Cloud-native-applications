@@ -1492,11 +1492,11 @@ You will configure a Helm Chart that will be used to deploy and configure the **
 
 In this task, you will verify that you can browse to the web service you have deployed and view the speaker and content information exposed by the API service.
 
-1. From the Kubernetes management dashboard, in the navigation menu, select the **Services** view under **Discovery and Load Balancing**.
+1. From the Kubernetes Service, in the navigation menu, select the **Services and ingresses**.
 
 2. In the list of services, locate the external endpoint for the `web` service and select this hyperlink to launch the application.
 
-   ![In the Services box, a red arrow points at the hyperlinked external endpoint for the web service.](media/image112.png "Application external endpoint")
+   ![Services is selected below Discovery and Load Balancing in the navigation menu. "External endpoints" is highlighted to show that an external endpoint has been created.](media/AzurePortal013.png "Web service endpoint")
 
 3. You will see the `web` application in your browser and be able to select the Speakers and Sessions links to view those pages without errors. The lack of errors means that the web application is correctly calling the API service to show the details on each of those pages.
 
