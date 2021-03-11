@@ -1678,27 +1678,25 @@ In this task, you will access and review the various logs and dashboards made av
 
 At this point, you have deployed a single instance of the web and API service containers. In this exercise, you will increase the number of container instances for the web service and scale the front-end on the existing cluster.
 
-### Task 1: Increase service instances from the Kubernetes dashboard
+### Task 1: Increase service instances from the Kubernetes Service
 
-In this task, you will increase the number of instances for the API deployment in the Kubernetes management dashboard. While it is deploying, you will observe the changing status.
+In this task, you will increase the number of instances for the API deployment in the Kubernetes Service from Azure Portal. While it is deploying, you will observe the changing status.
 
-1. Switch to the Kubernetes Dashboard.
+1. Switch to the Kubernetes Service.
 
 2. From the navigation menu, select **Workloads** -\> **Deployments**, and then select the **API** deployment.
 
-3. Select the **SCALE** button in the upper-right.
+3. Select the **YMAL** button.
 
-   ![In the Workloads > Deployments > api bar, the Scale icon is highlighted.](media/image89.png "Scale a resource")
+4. Change the number of replicas under spec to **2**, and then select **Review + save** then confirm save again.
 
-4. Change the number of replicas to **2**, and then select **Scale**.
-
-   ![In the Scale a Deployment dialog box, 2 is entered in the Desired number of pods box.](media/image116.png "Scale a Deployment dialog")
+   ![In the Scale a Deployment dialog box, 2 is entered in the Desired number of pods box.](media/AzurePortal016.png "Scale a Deployment dialog")
 
    > **Note**: If the deployment completes quickly, you may not see the deployment Waiting states in the dashboard, as described in the following steps.
 
-5. From the Replica Set view for the API, you will see it is now deploying and that there is one healthy instance and one pending instance.
+5. From the view for the API, you will see it is now deploying and that there is one healthy instance and one pending instance.
 
-   ![Replica Sets is selected under Workloads in the navigation menu on the left, and at right, Pods status: 1 pending, 1 running is highlighted. Below that, a red arrow points at the API deployment in the Pods box.](media/image117.png "View replica details")
+   ![Pods status: 1 pending, 1 running is highlighted.](media/AzurePortal017.png "View pods details")
 
 6. From the navigation menu, select **Deployments** from the list. Note that the api service has a pending status indicated by the grey timer icon, and it shows a pod count 1 of 2 instances (shown as `1/2`).
 
