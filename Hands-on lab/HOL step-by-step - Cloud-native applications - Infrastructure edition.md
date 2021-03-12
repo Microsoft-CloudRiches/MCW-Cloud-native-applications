@@ -1706,25 +1706,11 @@ In this task, you will increase the number of instances for the API deployment i
 
    - Three pods are healthy.
    
-   ![View active pods.](media/AzurePortal017.png "View active pods")
+   ![View active pods.](media/AzurePortal018.png "View active pods")
 
-7. Navigate to the web application from the browser again. The application should still work without errors as you navigate to Speakers and Sessions pages.
+7. If Old replica sets is exist, delete old replica sets on Deployment api and check ready on new replica set.
 
-   - Navigate to the `/stats` page. You will see information about the environment including:
-
-     - **webTaskId:** The task identifier for the web service instance.
-
-     - **taskId:** The task identifier for the API service instance.
-
-     - **hostName:** The hostname identifier for the API service instance.
-
-     - **pid:** The process id for the API service instance.
-
-     - **mem:** Some memory indicators returned from the API service instance.
-
-     - **counters:** Counters for the service itself, as returned by the API service instance.
-
-     - **uptime:** The up time for the API service.
+   ![Remove Old replica sets.](media/AzurePortal019.png "Remove Old replica sets")
 
    - Refresh the page in the browser, and you can see the hostName change between the two API service instances. The letters after `api-{number}-` in the hostname will change.
 
@@ -1738,7 +1724,7 @@ In this task, you will try to increase the number of instances for the API servi
 
 3. In the Edit a resource dialog, You will see a list of settings shown in YAML format. Use the copy button to copy the text to your clipboard.
 
-   ![Screenshot of the Edit a resource dialog box that displays yaml data.](media/AzurePortal018.PNG "Edit a resource YAML config")
+   ![Screenshot of the Edit a resource dialog box that displays yaml data.](media/AzurePortal019.png "Edit a resource YAML config")
 
 4. Paste the contents into the text editor of your choice (such as Notepad on Windows, macOS users can use TextEdit).
 
@@ -1762,7 +1748,7 @@ In this task, you will try to increase the number of instances for the API servi
 
    - Select Update.
 
-   ![UPDATE is highlighted in the Edit a Deployment dialog box.](media/AzurePortal019.png "Update API YAML")
+   ![UPDATE is highlighted in the Edit a Deployment dialog box.](media/AzurePortal020.png "Update API YAML")
 
 8. From the API deployment view, select **Scale**.
 
