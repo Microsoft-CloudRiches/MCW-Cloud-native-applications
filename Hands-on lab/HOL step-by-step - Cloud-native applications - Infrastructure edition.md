@@ -1698,19 +1698,9 @@ In this task, you will increase the number of instances for the API deployment i
 
    ![Pods status: 1 pending, 1 running is highlighted.](media/AzurePortal017.png "View pods details")
 
-6. From the Navigation menu, select **Workloads**. **Filter by namespace** choose **default**. From this view, note that the health overview in the right panel of this view. You will see the following:
+6. If Old replica sets is exist, delete old replica sets on Deployment api and check ready on new replica set.
 
-   - One deployment and one replica set are each healthy for the api service.
-
-   - One replica set is healthy for the web service.
-
-   - Three pods are healthy.
-   
-   ![View active pods.](media/AzurePortal018.png "View active pods")
-
-7. If Old replica sets is exist, delete old replica sets on Deployment api and check ready on new replica set.
-
-   ![Remove Old replica sets.](media/AzurePortal019.png "Remove Old replica sets")
+   ![Remove Old replica sets.](media/AzurePortal018.png "Remove Old replica sets")
 
    - Refresh the page in the browser, and you can see the hostName change between the two API service instances. The letters after `api-{number}-` in the hostname will change.
 
