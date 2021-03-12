@@ -1720,6 +1720,13 @@ In this task, you will try to increase the number of instances for the API servi
 
 5. The containers spec has a single entry for the API container at the moment. You will see that the name of the container is `api` - this is how you know you are looking at the correct container spec.
 
+   - Change replicas to 4:
+
+   ```text
+   spec:
+     replicas: 4
+   ```
+
    - Add the following snippet below the `name` property in the container spec:
 
    ```text
@@ -1727,48 +1734,35 @@ In this task, you will try to increase the number of instances for the API servi
 	            - containerPort: 3001
 	              hostPort: 3001
    ```
+   
+   - Then change cpu under requests:
+
+   ```text
+               requests:
+                 cpu: 500m
+   ```
 
    - Your container spec should now look like this:
 
-   ![Screenshot of the deployment yaml code, with the $.spec.template.spec.containers[0] section highlighted, showing the updated values for containerPort and hostPort, both set to port 3001.](media/image85.png "View container ports")
+   ![Screenshot of the deployment yaml code, showing the updated values for containerPort and hostPort, both set to port 3001.](media/image85.png "View container ports")
 
-7. Copy the updated document from notepad into the clipboard. Return to the Kubernetes dashboard, which should still be viewing the **api** deployment.
+6. Copy the updated document from notepad into the clipboard. Return to the Kubernetes Service, which should still be viewing the **api** deployment.
 
    - Paste the updated document.
 
-   - Select Update.
+   - Select Review and Save then Confirm Save again.
 
-   ![UPDATE is highlighted in the Edit a Deployment dialog box.](media/AzurePortal020.png "Update API YAML")
+   ![Save settings.](media/AzurePortal020.png "Save settings")
 
-8. From the API deployment view, select **Scale**.
+7. From the navigation menu select **Services**. Select the **api** service from the list. From the api service view, select **Pods** and you will see it has two healthy instances and two unhealthy (or possibly pending depending on timing) instances.
 
-9. Change the number of replicas to 4 and select **Scale**.
-
-    ![In the Scale a Deployment dialog box, 4 is entered in the Desired number of pods box.](media/image119.png "Scale a resource")
-
-10. From the navigation menu, select **Services** view under **Discovery and Load Balancing**. Select the **api** service from the **Services** list. From the api service view, you will see it has two healthy instances and two unhealthy (or possibly pending depending on timing) instances.
-
-    ![In the api service view, various information is displayed in the Details box and in the Pods box.](media/image120.png "View API service endpoints and pods")
-
-11. After a few minutes, select **Workloads** from the navigation menu. From this view, you should see an alert reported for the api deployment.
-
-    ![Workloads is selected in the navigation menu. At right, an exclamation point (!) appears next to the api deployment listing in the Deployments box.](media/image121.png "View deployment log")
-
-    > **Note**: This message indicates that there were not enough available resources to match the requirements for a new pod instance. In this case, this is because the instance requires port `3001`, and since there are only 2 nodes available in the cluster, only two api instances can be scheduled. The third and fourth pod instances will wait for a new node to be available that can run another instance using that port.
-
-12. Reduce the number of requested pods to `2` using the **Scale** button.
-
-13. Almost immediately, the warning message from the **Workloads** dashboard should disappear, and the **API** deployment will show `2/2` pods are running.
-
-    ![Workloads is selected in the navigation menu. A green check mark now appears next to the api deployment listing in the Deployments box at right.](media/image122.png "Review pods list")
+    ![In the api service view, various information is displayed in the Details box and in the Pods box.](media/AzurePortal021.png "View API service endpoints and pods")
 
 ### Task 3: Restart containers and test HA
 
 In this task, you will restart containers and validate that the restart does not impact the running service.
 
-1. From the navigation menu on the left, select **Services** view under **Discovery and Load Balancing**. From the **Services** list, select the external endpoint hyperlink for the web service, and visit the **Stats** page by adding / stats to the URL. Keep this open and handy to be refreshed as you complete the steps that follow.
-
-   ![In the Services box, the hyperlinked external endpoint for the web service is highlighted. ](media/image112.png "View the services external endpoint")
+1. From the browser, the external endpoint hyperlink for the web service, and visit the **Stats** page by adding / stats to the URL. Keep this open and handy to be refreshed as you complete the steps that follow.
 
    ![The Stats page is visible in this screenshot of the Contoso Neuro web application.](media/image123.png "Contoso web task details")
 
