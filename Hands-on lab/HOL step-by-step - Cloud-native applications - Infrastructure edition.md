@@ -1768,45 +1768,43 @@ In this task, you will restart containers and validate that the restart does not
 
 2. From the navigation menu, select **Workloads** -> **Deployments**. From Deployments list, select the **API** deployment.
 
-   ![In the left menu the Deployments item is selected. The API deployment is highlighted in the Deployments list box.](media/image124.png "API pod deployments")
+   ![In the api service view, various information is displayed in the Details box and in the Pods box.](media/AzurePortal021.png "View API service endpoints and pods")
 
-3. From the API deployment view, select **Scale** and from the dialog presented, and enter `4` for the desired number of pods. Select **OK**.
+3. From the API deployment view, select **YAML** and from the dialog presented, and check `4` for the desired number of replicas.
 
-4. From the navigation menu, select **Workloads** -> **Replica Sets**. Select the **api** replica set, and from the **Replica Set** view, you will see that two pods cannot deploy.
+4. From the navigation menu, select **Overview**. From the **Pods** view, you will see that two pods cannot deploy.
 
-   ![Replica Sets is selected under Workloads in the navigation menu on the left. On the right are the Details and Pods boxes. In the Pods box, two pods have exclamation point (!) alerts and messages indicating that they cannot deploy.](media/image125.png "View failed pod deployment details")
+   ![Pods is selected under Workloads in the navigation menu on the left. On the right are the Details and Pods boxes. In the Pods box, two pods have exclamation point (!) alerts and messages indicating that they cannot deploy.](media/AzurePortal022.png "View failed pod deployment details")
 
 5. Return to the browser tab with the web application stats page loaded. Refresh the page over and over. You will not see any errors, but you will see the api host name change between the two api pod instances periodically. The task id and pid might also change between the two api pod instances.
 
    ![On the Stats page in the Contoso Neuro web application, two different api host name values are highlighted.](media/image126.png "View web task hostname")
 
-6. After refreshing enough times to see that the `hostName` value is changing, and the service remains healthy, return to the **Replica Sets** view for the API. From the navigation menu, select Replica Sets under Workloads and select the **API** replica set.
+6. After refreshing enough times to see that the `hostName` value is changing, and the service remains healthy, return to the view for the API.
 
 7. From this view, take note that the hostName value shown in the web application stats page matches the pod names for the pods that are running.
 
-   ![Two different pod names are highlighted in the Pods box, which match the values from the previous Stats page.](media/image127.png "View two API pod details")
-
 8. Note the remaining pods are still pending, since there are not enough port resources available to launch another instance. Make some room by deleting a running instance. Select the context menu and choose **Delete** for one of the healthy pods.
 
-   ![The context menu for a pod in the pod list is expanded with the Delete item selected.](media/image128.png "Delete running pod instance")
+   ![The context menu for a pod in the pod list is expanded with the Delete item selected.](media/AzurePortal023.png "Delete running pod instance")
 
 9. Once the running instance is gone, Kubernetes will be able to launch one of the pending instances. However, because you set the desired size of the deploy to 4, Kubernetes will add a new pending instance. Removing a running instance allowed a pending instance to start, but in the end, the number of pending and running instances is unchanged.
 
-   ![The first row of the Pods box is highlighted, and the pod has a green check mark and is running.](media/image129.png "API pod running")
+   ![The first row of the Pods box is highlighted, and the pod has a green check mark and is running.](media/AzurePortal024.png "API pod running")
 
-10. From the navigation menu, select **Deployments** under **Workloads**. From the view's Deployments list, select the **API** deployment.
+10. From the navigation menu, select **YAML**.
 
-11. From the API Deployment view, select Scale and enter `1` as the desired number of pods. Select **OK**.
+11. From the API Deployment view, change replicas Scale and enter `1` as the desired number of pods. Select **OK**.
 
-    ![In the Scale a Deployment dialog box, 1 is entered in the Desired number of pods box.](media/image130.png "Scale replicas to one")
+    ![In the Scale a Deployment dialog box, 1 is entered in the Desired number of pods box.](media/AzurePortal025.png "Scale replicas to one")
 
 12. Return to the web site's stats page in the browser and refresh while this is scaling down. You will notice that only one API host name shows up, even though you may still see several running pods in the API replica set view. Even though several pods are running, Kubernetes will no longer send traffic to the pods it has selected to scale down. In a few moments, only one pod will show in the API replica set view.
 
-    ![Replica Sets is selected under Workloads in the navigation menu on the left. On the right are the Details and Pods boxes. Only one API host name, which has a green check mark and is listed as running, appears in the Pods box.](media/image131.png "View replica details")
+    ![Replica Sets is selected under Workloads in the navigation menu on the left. On the right are the Details and Pods boxes. Only one API host name, which has a green check mark and is listed as running, appears in the Pods box.](media/AzurePortal026.png "View replica details")
 
-13. From the navigation menu, select **Workloads**. From this view, note that there is only one API pod now.
+13. From the Kubernetes Services navigation menu, select **Workloads**. From this view, note that there is only one API pod now.
 
-    ![Workloads is selected in the navigation menu on the left. On the right are the Deployment, Pods, and Replica Sets boxes.](media/image132.png "View only one replica")
+    ![Workloads is selected in the navigation menu on the left. On the right are the Deployment, Pods, and Replica Sets boxes.](media/AzurePortal027.png "View only one replica")
 
 ### Task 4: Configure Cosmos DB Autoscale
 
