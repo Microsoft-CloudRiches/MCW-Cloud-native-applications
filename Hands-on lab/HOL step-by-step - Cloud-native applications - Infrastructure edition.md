@@ -57,12 +57,10 @@ Microsoft and the trademarks listed at https://www.microsoft.com/en-us/legal/int
     - [Task 4: Configure Cosmos DB Autoscale](#task-4-configure-cosmos-db-autoscale)
     - [Task 5: Test Cosmos DB Autoscale](#task-5-test-cosmos-db-autoscale)
   - [Exercise 5: Working with services and routing application traffic](#exercise-5-working-with-services-and-routing-application-traffic)
-    - [Task 1: Scale a service without port constraints](#task-1-scale-a-service-without-port-constraints)
-    - [Task 2: Update an external service to support dynamic discovery with a load balancer](#task-2-update-an-external-service-to-support-dynamic-discovery-with-a-load-balancer)
-    - [Task 3: Adjust CPU constraints to improve scale](#task-3-adjust-cpu-constraints-to-improve-scale)
-    - [Task 4: Perform a rolling update](#task-4-perform-a-rolling-update)
-    - [Task 5: Configure Kubernetes Ingress](#task-5-configure-kubernetes-ingress)
-    - [Task 6: Multi-region Load Balancing with Traffic Manager](#task-6-multi-region-load-balancing-with-traffic-manager)
+    - [Task 1: Update an external service to support dynamic discovery with a load balancer](#task-1-update-an-external-service-to-support-dynamic-discovery-with-a-load-balancer)
+    - [Task 2: Perform a rolling update](#task-2-perform-a-rolling-update)
+    - [Task 3: Configure Kubernetes Ingress](#task-3-configure-kubernetes-ingress)
+    - [Task 4: Multi-region Load Balancing with Traffic Manager](#task-4-multi-region-load-balancing-with-traffic-manager)
   - [After the hands-on lab](#after-the-hands-on-lab)
 
 <!-- /TOC -->
@@ -1884,79 +1882,31 @@ In the previous exercise, we introduced a restriction to the scale properties of
 
 Kubernetes services can discover the ports assigned to each pod, allowing you to run multiple instances of the pod on the same agent node --- something that is not possible when you configure a specific static port (such as 3001 for the API service).
 
-### Task 1: Scale a service without port constraints
-
-In this task, we will reconfigure the API deployment so that it will produce pods that choose a dynamic hostPort for improved scalability.
-
-1. From the navigation menu select **Deployments** under **Workloads**. From the view's Deployments list, select the **API** deployment.
-
-2. Select **Edit**.
-
-3. From the **Edit a Deployment** dialog, do the following:
-
-   - Scroll to the first spec node that describes replicas as shown in the screenshot. Set the value for replicas to `4`.
-
-   - Within the replicas spec, beneath the template node, find the **api** containers spec. Remove the `hostPort` entry for the API container's port mapping.  The screenshot below shows the desired configuration after editing.
-
-   - Within the resources, beneath the template node, find the **cpu** under requests. Update this to `100m` so the **api** instances use less than a full CPU core.
-
-     ![This is a screenshot of the Edit a Resource dialog box with various displayed information about spec, selector, and template. Under the spec node, replicas: 4 is highlighted. Further down, ports are highlighted.](media/image137.png "Edit cpu value in YAML")
-
-     ![This is a screenshot of the Edit a Resource dialog box with the cpu information set.](media/image137b.png "Updated cpu value shown")
-
-4. Select **Update**. New pods will now choose a dynamic port.
-
-5. The API service can now scale to 4 pods since it is no longer constrained to an instance per node and a full cpu core per instance -- a previous limitation while using port `3001`.
-
-    ![Replica Sets is selected under Workloads in the navigation menu on the left. On the right, four pods are listed in the Pods box, and all have green check marks and are listed as Running.](media/image138.png "Replica Pods listed")
-
-6. Return to the browser and refresh the stats page. You should see all 4 pods serve responses as you refresh.
-
-### Task 2: Update an external service to support dynamic discovery with a load balancer
+### Task 1: Update an external service to support dynamic discovery with a load balancer
 
 In this task, you will update the web service so that it supports dynamic discovery through the Azure load balancer.
 
 1. From the navigation menu, select **Deployments** under **Workloads**. From the view's Deployments list, select the **web** deployment.
 
-2. Select **Edit**, then select the **JSON** tab.
+2. Select **YAML**, then select the **JSON** tab.
 
-3. From the dialog, scroll to the web containers spec as shown in the screenshot. Remove the hostPort entry for the web container's port mapping.
+3. From the dialog, scroll to the web containers spec as shown in the screenshot.
+   
+   - **Replicas** set to `4`.
+   - Remove the **hostPort** entry for the web container's port mapping.
+   - **CPU** set to `"125m"`.
 
-    ![This is a screenshot of the Edit a Deployment dialog box with various displayed information about spec, containers, ports, and env. The ports node, containerPort: 3001 and protocol: TCP are highlighted.](media/image140.png "Remove web container hostPort entry")
+    ![This is a screenshot of the Edit a Deployment dialog box with various displayed information about spec, containers, ports, and env. The ports node, containerPort: 3001 and protocol: TCP are highlighted.](media/AzurePortal028.png "Remove web container hostPort entry")
 
-4. Select **Update**.
+4. Select **Review + save** then **save**.
 
-5. From the **web** Deployments view, select **Scale**. From the dialog presented enter 4 as the desired number of pods and select **OK**.
+5. When the deployment update completes, four web pods should be shown in running state.
 
-6. Check the status of the scale out by refreshing the web deployment's view. From the navigation menu, select **Pods** from under Workloads. Select the **api** pods. From this view, you should see an error like that shown in the following screenshot.
+   ![Four web pods are listed in the Pods box, and all have green check marks and are listed as Running.](media/AzurePortal029.png "Four pods running")
 
-   ![Deployments is selected under Workloads in the navigation menu on the left. On the right are the Details and New Replica Set boxes. The web deployment is highlighted in the New Replica Set box, indicating an error.](media/image141.png "View Pod deployment events")
+6. Return to the browser tab with the web application loaded. Refresh the stats page at /stats to watch the display update to reflect the different api pods by observing the host name refresh.
 
-Like the API deployment, the web deployment used a fixed _hostPort_, and your ability to scale was limited by the number of available agent nodes. However, after resolving this issue for the web service by removing the _hostPort_ setting, the web deployment is still unable to scale past two pods due to CPU constraints. The deployment is requesting more CPU than the web application needs, so you will fix this constraint in the next task.
-
-### Task 3: Adjust CPU constraints to improve scale
-
-In this task, you will modify the CPU requirements for the web service so that it can scale out to more instances.
-
-1. From the navigation menu, select **Deployments** under **Workloads**. From the view's Deployments list, select the **web** deployment.
-
-2. Select the vertical ellipses, then select **Edit**.
-
-3. From the Edit a Deployment dialog, select the **JSON** tab, then find the **cpu** resource requirements for the web container. Change this value to `125m`.
-
-   ![This is a screenshot of the Edit a Deployment dialog box with various displayed information about ports, env, and resources. The resources node, with cpu: 125m selected, is highlighted.](media/image142.png "Change cpu value")
-
-4. Select **Update** to save the changes and update the deployment.
-
-5. From the navigation menu, select **Replica Sets** under **Workloads**. From the view's Replica Sets list select the web replica set.
-
-6. When the deployment update completes, four web pods should be shown in running state.
-
-   ![Four web pods are listed in the Pods box, and all have green check marks and are listed as Running.](media/image143.png "Four pods running")
-
-7. Return to the browser tab with the web application loaded. Refresh the stats page at /stats to watch the display update to reflect the different api pods by observing the host name refresh.
-
-### Task 4: Perform a rolling update
+### Task 2: Perform a rolling update
 
 In this task, you will edit the web application source code to add Application Insights and update the Docker image used by the deployment. Then you will perform a rolling update to demonstrate how to deploy a code change.
 
@@ -2019,7 +1969,7 @@ In this task, you will edit the web application source code to add Application I
 
     ![On the Stats page, the hostName is highlighted.](media/image145.png "On Stats page hostName is displayed")
 
-### Task 5: Configure Kubernetes Ingress
+### Task 3: Configure Kubernetes Ingress
 
 In this task you will setup a Kubernetes Ingress to take advantage of path-based routing and TLS termination.
 
@@ -2261,7 +2211,7 @@ In this task you will setup a Kubernetes Ingress to take advantage of path-based
 
     > It can take between 5 and 30 minutes before the SSL site becomes available. This is due to the delay involved with provisioning a TLS cert from letsencrypt.
 
-### Task 6: Multi-region Load Balancing with Traffic Manager
+### Task 4: Multi-region Load Balancing with Traffic Manager
 
 In this task, you will setup Azure Traffic Manager as a multi-region load balancer. This will enable you to provision an AKS instance of the app in a secondary Azure region with load balancing between the two regions.
 
