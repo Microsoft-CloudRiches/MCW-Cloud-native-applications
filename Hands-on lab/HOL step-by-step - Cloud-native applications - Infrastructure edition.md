@@ -1898,7 +1898,7 @@ In this task, you will update the web service so that it supports dynamic discov
 
     ![This is a screenshot of the Edit a Deployment dialog box with various displayed information about spec, containers, ports, and env. The ports node, containerPort: 3001 and protocol: TCP are highlighted.](media/AzurePortal028.png "Remove web container hostPort entry")
 
-4. Select **Review + save** then **save**.
+4. Select **Review + save** then **Save**.
 
 5. When the deployment update completes, four web pods should be shown in running state.
 
@@ -1963,7 +1963,7 @@ In this task, you will edit the web application source code to add Application I
 
 10. From the navigation menu, select **Replica Sets** under **Workloads**. From this view, you will see a new replica set for the web, which may still be in the process of deploying (as shown below) or already fully deployed.
 
-    ![At the top of the list, a new web replica set is listed as a pending deployment in the Replica Set box.](media/image144.png "Pod deployment is in progress")
+    ![At the top of the list, a new web replica set is listed as a pending deployment in the Replica Set box.](media/AzurePortal030.png "Pod deployment is in progress")
 
 11. While the deployment is in progress, you can navigate to the web application and visit the stats page at `/stats`. Refresh the page as the rolling update executes. Observe that the service is running normally, and tasks continue to be load balanced.
 
@@ -1998,9 +1998,9 @@ In this task you will setup a Kubernetes Ingress to take advantage of path-based
 
 4. From the Kubernetes dashboard, ensure the Namespace filter is set to **All namespaces**
 
-5. Under **Discovery and Load Balancing**, select **Services**, then copy the IP Address for the **External endpoints** for the `nginx-ingress-RANDOM-controller` service.
+5. Under **Services and ingresses**, select **Services**, then copy the IP Address for the **External endpoints** for the `nginx-ingress-RANDOM-controller` service.
 
-   ![A screenshot of the Kubernetes management dashboard showing the ingress controller settings.](media/Ex4-Task5.5.png "Copy ingress controller settings")
+   ![A screenshot of the Kubernetes management showing the ingress controller settings.](media/AzurePortal031.png "Copy ingress controller settings")
 
     > **Note**: It could take a few minutes to refresh, alternately, you can find the IP using the following command in Azure Cloud Shell.
     >
