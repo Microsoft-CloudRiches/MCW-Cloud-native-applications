@@ -1160,7 +1160,7 @@ In this task, deploy the web service using `kubectl`.
 2. Configure kubectl to connect to the Kubernetes cluster:
 
    ```bash
-   az aks get-credentials -a --name fabmedical-SUFFIX --resource-group fabmedical-SUFFIX
+   az aks get-credentials -a --name fabmedical-[SUFFIX] --resource-group fabmedical-[SUFFIX]
    ```
 
 3. Test that the configuration is correct by running a simple kubectl command to produce a list of nodes:
