@@ -1726,14 +1726,6 @@ In this task, you will try to increase the number of instances for the API servi
    spec:
      replicas: 4
    ```
-
-   - Add the following snippet below the `name` property in the container spec:
-
-   ```text
-             ports:
-	            - containerPort: 3001
-	              hostPort: 3001
-   ```
    
    - Then change cpu under requests:
 
@@ -1741,10 +1733,6 @@ In this task, you will try to increase the number of instances for the API servi
                requests:
                  cpu: 500m
    ```
-
-   - Your container spec should now look like this:
-
-   ![Screenshot of the deployment yaml code, showing the updated values for containerPort and hostPort, both set to port 3001.](media/image85.png "View container ports")
 
 6. Copy the updated document from notepad into the clipboard. Return to the Kubernetes Service, which should still be viewing the **api** deployment.
 
