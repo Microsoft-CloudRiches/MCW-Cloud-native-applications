@@ -1017,7 +1017,7 @@ In this task, you will deploy the API application to the Azure Kubernetes Servic
         spec:
           containers:
             - name: api
-              image: [LOGINSERVER].azurecr.io/content-api
+              image: [ACRUSERNAME].azurecr.io/content-api
               resources:
                 requests:
                   cpu: '1'
@@ -1208,7 +1208,7 @@ In this task, deploy the web service using `kubectl`.
            name: web
          spec:
            containers:
-           - image: [LOGINSERVER].azurecr.io/content-web
+           - image: [ACRUSERNAME].azurecr.io/content-web
              env:
                - name: CONTENT_API_URL
                  value: http://api:3001
