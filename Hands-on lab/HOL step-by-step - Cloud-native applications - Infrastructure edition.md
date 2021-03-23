@@ -610,7 +610,7 @@ In this task, you will push images to your ACR account, version images with tagg
 4. From the cloud shell session connected to your build VM, login to your ACR account by typing the following command. Follow the instructions to complete the login.
 
    ```bash
-   docker login [ACRLOGINSERVER] -u [ACRUSERNAME]
+   docker login [LOGINSERVER] -u [ACRUSERNAME]
    ```
 
    For example:
