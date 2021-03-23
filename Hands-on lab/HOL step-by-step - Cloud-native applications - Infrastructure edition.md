@@ -610,14 +610,16 @@ In this task, you will push images to your ACR account, version images with tagg
 4. From the cloud shell session connected to your build VM, login to your ACR account by typing the following command. Follow the instructions to complete the login.
 
    ```bash
-   docker login [ACRLOGINSERVER] -u [ACRUSERNAME] -p [ACRPASSWORD]
+   docker login [ACRLOGINSERVER] -u [ACRUSERNAME]
    ```
 
    For example:
 
    ```bash
-   docker login fabmedicalsoll.azurecr.io -u fabmedicalsoll -p +W/j=l+Fcze=n07SchxvGSlvsLRh/7ga
+   docker login fabmedicalsoll.azurecr.io -u fabmedicalsoll
    ```
+   
+   Then enter ACR password.
 
    ![In this screenshot of the console window, the following has been typed and run at the command prompt: docker login fabmedicalsoll.azurecr.io](media/image65.png "Docker log into container")
 
